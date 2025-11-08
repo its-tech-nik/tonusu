@@ -5,7 +5,8 @@ import { useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Input, InputGroup } from "@/design_system/input.tsx";
 import { Button } from "@/design_system/button.tsx";
-// import L from "leaflet";
+
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -30,15 +31,32 @@ function Index() {
 
   return (
     <div>
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 max-lg:hidden">
+      <MapContainer
+        className="absolute top-16 left-0 bottom-0 right-0 z-0"
+        center={[51.505, -0.09]}
+        zoom={13}
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={[51.505, -0.09]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
+
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 max-lg:hidden z-1">
         <InputGroup>
-          <Input type="text" placeholder="Where to?" className="" />
+          <Input type="text" placeholder="Where to?" />
         </InputGroup>
       </div>
 
-      <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+      <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-1">
         <Button
-          className="rounded-full p-5 overflow-hidden"
+          className="rounded-full p-5 aspect-square overflow-hidden"
           onClick={() => navigate({ to: "/route_overview" })}
         >
           <svg
@@ -62,7 +80,7 @@ function Index() {
           </svg>
         </Button>
         <Button
-          className="rounded-full p-5 overflow-hidden"
+          className="rounded-full p-5 aspect-square overflow-hidden"
           onClick={() => navigate({ to: "/reporting" })}
         >
           <svg

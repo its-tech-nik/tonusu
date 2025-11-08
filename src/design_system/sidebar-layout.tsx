@@ -91,7 +91,7 @@ export function SidebarLayout({
       </header>
 
       {/* Content */}
-      <main className="flex flex-1 flex-col pb-2 pt-16 lg:min-w-0 lg:pl-2 lg:pr-2 lg:pt-2 relative max-lg:absolute max-lg:top-0 max-lg:left-0 max-lg:right-0 max-lg:bottom-0">
+      <main className="flex flex-1 flex-col pb-2 pt-16 lg:min-w-0 lg:pl-2 lg:pr-2 lg:pt-2 relative max-lg:absolute max-lg:top-0 max-lg:left-0 max-lg:right-0 max-lg:bottom-0 -z-1">
         <div className="absolute top-4 left-4 max-lg:hidden">
           <Button
             className="absolute"
