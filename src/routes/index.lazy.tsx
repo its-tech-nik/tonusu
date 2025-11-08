@@ -66,6 +66,7 @@ function Index() {
     [navigate],
   );
   const actionMenuRadius = 160;
+  const actionMenuButtonSize = 72;
 
   return (
     <div>
@@ -117,7 +118,13 @@ function Index() {
             />
           </svg>
         </Button>
-        <div className="relative h-0 w-0">
+        <div
+          className="relative"
+          style={{
+            width: actionMenuButtonSize,
+            height: actionMenuButtonSize,
+          }}
+        >
           {actionMenuItems.map((item, index) => {
             const angle =
               (Math.PI / 2 / (actionMenuItems.length - 1 || 1)) * index;
@@ -133,6 +140,8 @@ function Index() {
                   position: "absolute",
                   bottom: 0,
                   right: 0,
+                  width: actionMenuButtonSize,
+                  height: actionMenuButtonSize,
                   transform: isActionMenuOpen
                     ? `translate(-${offsetX}px, -${offsetY}px)`
                     : "translate(0px, 0px)",
@@ -163,7 +172,13 @@ function Index() {
           <Button
             className="rounded-full p-5 aspect-square overflow-hidden"
             onClick={() => setIsActionMenuOpen((prev) => !prev)}
-            style={{ position: "absolute", bottom: 0, right: 0 }}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              width: actionMenuButtonSize,
+              height: actionMenuButtonSize,
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
