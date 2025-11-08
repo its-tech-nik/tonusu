@@ -172,7 +172,10 @@ export const Button = forwardRef(function Button(
   ref: React.ForwardedRef<HTMLElement>,
 ) {
   const classes = clsx(
-    className,
+    className
+      ?.split(" ")
+      .map((c) => `!${c}`)
+      .join(" "),
     styles.base,
     outline
       ? styles.outline

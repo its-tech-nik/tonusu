@@ -91,7 +91,7 @@ export function SidebarLayout({
       </header>
 
       {/* Content */}
-      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pl-2 lg:pr-2 lg:pt-2 relative">
+      <main className="flex flex-1 flex-col pb-2 pt-16 lg:min-w-0 lg:pl-2 lg:pr-2 lg:pt-2 relative max-lg:absolute max-lg:top-0 max-lg:left-0 max-lg:right-0 max-lg:bottom-0">
         <div className="absolute top-4 left-4 max-lg:hidden">
           <Button
             className="absolute"
@@ -133,14 +133,7 @@ export function SidebarLayout({
           </Button>
         </div>
         <div className="grow p-6 !pb-0 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-xs lg:ring-1 lg:ring-zinc-950/5 dark:lg:bg-zinc-900 dark:lg:ring-white/10">
-          <div
-            className={clsx({
-              "mx-auto h-[96vh]": true,
-              "max-w-7xl": !pathname.includes("/editor"),
-            })}
-          >
-            {children}
-          </div>
+          <div>{children}</div>
         </div>
       </main>
     </div>

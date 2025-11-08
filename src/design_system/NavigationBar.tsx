@@ -31,12 +31,7 @@ function NavigationBar() {
       <NavbarSpacer className="ml-0.5" />
       <NavbarSection>
         <InputGroup className="w-full">
-          <MagnifyingGlassIcon />
-          <Input
-            name="search"
-            placeholder="Search&hellip;"
-            aria-label="Search"
-          />
+          <Input name="search" placeholder="Where to?" aria-label="Where to?" />
         </InputGroup>
       </NavbarSection>
       <NavbarSpacer />

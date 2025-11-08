@@ -28,7 +28,6 @@ import {
   SidebarFooter,
 } from "@/design_system/sidebar.tsx";
 
-import { Input, InputGroup } from "@/design_system/input.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function SideBar() {
@@ -43,17 +42,7 @@ function SideBar() {
           <SidebarLabel>ToNuSU</SidebarLabel>
         </SidebarItem>
 
-        <SidebarSection className="max-lg:hidden">
-          <InputGroup>
-            <MagnifyingGlassIcon />
-            <Input
-              name="search"
-              placeholder="Αναζήτηση&hellip;"
-              aria-label="Αναζήτηση"
-              onChange={(e) => {}}
-            />
-          </InputGroup>
-        </SidebarSection>
+        <SidebarSection className="max-lg:hidden"></SidebarSection>
       </SidebarHeader>
 
       <SidebarBody>
