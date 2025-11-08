@@ -31,7 +31,6 @@ import {
 
 import { Input, InputGroup } from "@/design_system/input.tsx";
 import { useLiveQuery } from "dexie-react-hooks";
-import { db, type ContractInfo } from "@/db/db.ts";
 import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useRouter } from "@tanstack/react-router";
@@ -42,32 +41,8 @@ function SideBar() {
     useAuth0();
 
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState<ContractInfo[]>([]);
 
-  const contracts = useLiveQuery(() =>
-    db.contracts.orderBy("last_modified").reverse().toArray(),
-  );
   const router = useRouter();
-
-  const performSearch = useCallback(
-    async (term: string) => {
-      const searchResults = await db.contracts
-        .orderBy("last_modified")
-        .reverse()
-        .filter((item) => item.name.toLowerCase().includes(term.toLowerCase()))
-        .toArray();
-      setResults(searchResults);
-    },
-    [search],
-  );
-
-  useEffect(() => {
-    performSearch(search);
-  }, [search]);
-
-  useEffect(() => {
-    setResults(contracts || []);
-  }, [contracts]);
 
   return (
     <Sidebar className="w-64">
@@ -91,24 +66,6 @@ function SideBar() {
       </SidebarHeader>
 
       <SidebarBody>
-        {results.length > 0 && (
-          <SidebarSection>
-            <SidebarHeading>Σήμερα</SidebarHeading>
-            {results.map((contract) => (
-              <SidebarItem
-                key={contract.uuid}
-                href={`/editor/${contract.uuid}`}
-                className={clsx(
-                  router.state.location.pathname.includes(contract.uuid) &&
-                    "bg-white/10 rounded-md",
-                )}
-              >
-                <span className="line-clamp-2">{contract.name}</span>
-              </SidebarItem>
-            ))}
-          </SidebarSection>
-        )}
-
         <SidebarSpacer />
 
         <SidebarSection>

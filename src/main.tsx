@@ -24,12 +24,6 @@ declare module "@tanstack/react-router" {
 import { Auth0Provider } from "@auth0/auth0-react";
 import { isSecureBrowser } from "./utils/highPrivacyBrowsers.tsx";
 
-import { PostHogProvider } from "posthog-js/react";
-
-const options = {
-  api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-};
-
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
@@ -53,12 +47,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <PostHogProvider
-        apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
-        options={options}
-      >
-        <App />
-      </PostHogProvider>
+      <App />
     </StrictMode>,
   );
 }
