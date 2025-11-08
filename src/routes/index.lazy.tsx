@@ -10,8 +10,6 @@ GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-import Display from "@/components/PdfDisplay.tsx";
-import { Root } from "@anaralabs/lector";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const Route = createLazyFileRoute("/" as never)({
