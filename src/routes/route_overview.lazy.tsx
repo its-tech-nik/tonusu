@@ -307,76 +307,20 @@ function RouteComponent() {
           </li>
         </ul>
       </div>
-      <div
-        style={{
-          position: "fixed",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          padding: "16px",
-          background: "transparent",
-          boxShadow: "0 -10px 30px rgba(15, 23, 42, 0.12)",
-          backdropFilter: "blur(18px)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            justifyContent: "space-between",
-          }}
-        >
+      <div className="fixed inset-x-0 bottom-0 mx-auto max-w-[640px] px-4 pb-6 pt-4 bg-transparent backdrop-blur-[18px] [box-shadow:0_-10px_30px_rgba(15,23,42,0.12)] lg:inset-auto lg:bottom-6 lg:right-6 lg:left-auto lg:max-w-none lg:px-0 lg:py-0 lg:bg-transparent lg:[box-shadow:none]">
+        <div className="flex gap-3 justify-between lg:flex-col">
           {bottomActionButtons.map(({ id, label, icon }) => (
             <button
               key={id}
               type="button"
-              style={{
-                flex: 1,
-                padding: "12px 16px",
-                borderRadius: "9999px",
-                border: "1px solid rgba(148, 163, 184, 0.3)",
-                background: "rgba(255, 255, 255, 0.75)",
-                color: "#111827",
-                fontSize: "16px",
-                fontWeight: 500,
-                backdropFilter: "blur(12px)",
-                boxShadow:
-                  "0 12px 24px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.1)",
-                transition:
-                  "transform 150ms ease, box-shadow 150ms ease, background 150ms ease",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-              }}
-              onMouseEnter={(event) => {
-                event.currentTarget.style.transform = "translateY(-4px)";
-                event.currentTarget.style.boxShadow =
-                  "0 16px 32px rgba(15, 23, 42, 0.22), 0 6px 14px rgba(15, 23, 42, 0.12)";
-                event.currentTarget.style.background =
-                  "rgba(255, 255, 255, 0.85)";
-              }}
-              onMouseLeave={(event) => {
-                event.currentTarget.style.transform = "translateY(0)";
-                event.currentTarget.style.boxShadow =
-                  "0 12px 24px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.1)";
-                event.currentTarget.style.background =
-                  "rgba(255, 255, 255, 0.75)";
-              }}
+              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-slate-300/40 bg-white/75 px-4 py-3 text-[15px] font-semibold text-slate-900 backdrop-blur-md shadow-[0_12px_24px_rgba(15,23,42,0.18),0_2px_8px_rgba(15,23,42,0.1)] transition-all duration-150 hover:-translate-y-1 hover:bg-white/85 hover:shadow-[0_16px_32px_rgba(15,23,42,0.22),0_6px_14px_rgba(15,23,42,0.12)] lg:flex-none"
             >
               {icon && (
-                <span
-                  aria-hidden="true"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                <span className="inline-flex items-center justify-center">
                   {icon}
                 </span>
               )}
-              <span style={{ fontSize: "15px", fontWeight: 600 }}>{label}</span>
+              <span className="text-[15px] font-semibold">{label}</span>
             </button>
           ))}
         </div>
