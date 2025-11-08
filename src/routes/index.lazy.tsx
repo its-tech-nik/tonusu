@@ -94,30 +94,32 @@ function Index() {
       </div>
 
       <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-10">
-        <Button
-          className="rounded-full p-5 aspect-square overflow-hidden"
-          onClick={() => navigate({ to: "/route_overview" })}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-10"
+        {!isActionMenuOpen && (
+          <Button
+            className=""
+            onClick={() => navigate({ to: "/route_overview" })}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-            />
-          </svg>
-        </Button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-10"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+              />
+            </svg>
+          </Button>
+        )}
         <div
           className="relative"
           style={{
@@ -170,7 +172,7 @@ function Index() {
           })}
 
           <Button
-            className="rounded-full p-5 aspect-square overflow-hidden"
+            className="aspect-square"
             onClick={() => setIsActionMenuOpen((prev) => !prev)}
             style={{
               position: "absolute",
