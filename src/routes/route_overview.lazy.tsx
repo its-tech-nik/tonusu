@@ -19,16 +19,18 @@ function RouteComponent() {
     Math.max(popularityPercent, 0),
     100,
   );
+  // TODO: get the user's location and convert to a city name
+  const weatherQueryLocation = "Millstreet";
   const {
-    data: londonWeather,
-    isPending: isLondonWeatherPending,
-    error: londonWeatherError,
+    data: weatherData,
+    isPending: isWeatherPending,
+    error: weatherError,
   } = useQuery({
-    queryKey: ["weather", "Millstreet"],
+    queryKey: ["weather", weatherQueryLocation],
     queryFn: async () => {
       const apiKey = "b1b15e88fa797225412429c1c50c122a1";
       const url = new URL("https://api.openweathermap.org/data/2.5/weather");
-      url.searchParams.set("q", "Millstreet");
+      url.searchParams.set("q", weatherQueryLocation);
       url.searchParams.set("units", "metric");
       if (apiKey) {
         url.searchParams.set("appid", apiKey);
@@ -48,10 +50,10 @@ function RouteComponent() {
     },
     staleTime: 5 * 60 * 1000,
   });
-  const londonWeatherIcon = londonWeather?.weather?.[0]?.icon;
-  const londonWeatherDescription = londonWeather?.weather?.[0]?.description;
-  const londonWeatherIconUrl = londonWeatherIcon
-    ? `https://openweathermap.org/img/wn/${londonWeatherIcon}@2x.png`
+  const weatherIcon = weatherData?.weather?.[0]?.icon;
+  const weatherDescription = weatherData?.weather?.[0]?.description;
+  const weatherIconUrl = weatherIcon
+    ? `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`
     : undefined;
   const bottomActionButtons: Array<{
     id: string;
@@ -197,30 +199,28 @@ function RouteComponent() {
       </div>
       <div>
         <h1>Weather</h1>
-        {isLondonWeatherPending && <p>Loading weather...</p>}
-        {londonWeatherError instanceof Error && (
-          <p role="alert">
-            Failed to load weather: {londonWeatherError.message}
-          </p>
+        {isWeatherPending && <p>Loading weather...</p>}
+        {weatherError instanceof Error && (
+          <p role="alert">Failed to load weather: {weatherError.message}</p>
         )}
         <div>
-          {!isLondonWeatherPending && !londonWeatherError && londonWeather && (
+          {!isWeatherPending && !weatherError && weatherData && (
             <div className="flex flex-row">
-              {londonWeatherIconUrl && (
+              {weatherIconUrl && (
                 <img
-                  src={londonWeatherIconUrl}
-                  alt={londonWeatherDescription ?? "Weather icon"}
+                  src={weatherIconUrl}
+                  alt={weatherDescription ?? "Weather icon"}
                   width={100}
                   height={100}
                   style={{ objectFit: "contain" }}
                 />
               )}
               <div>
-                <p>Conditions: {londonWeatherDescription ?? "Unknown"}</p>
-                <p>Temperature: {londonWeather.main.temp.toFixed(1)}°C</p>
-                <p>Feels like: {londonWeather.main.feels_like.toFixed(1)}°C</p>
-                <p>Humidity: {londonWeather.main.humidity}%</p>
-                <p>Wind speed: {londonWeather.wind.speed} m/s</p>
+                <p>Conditions: {weatherDescription ?? "Unknown"}</p>
+                <p>Temperature: {weatherData.main.temp.toFixed(1)}°C</p>
+                <p>Feels like: {weatherData.main.feels_like.toFixed(1)}°C</p>
+                <p>Humidity: {weatherData.main.humidity}%</p>
+                <p>Wind speed: {weatherData.wind.speed} m/s</p>
               </div>
             </div>
           )}
