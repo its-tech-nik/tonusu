@@ -26,30 +26,21 @@ import {
   SidebarBody,
   SidebarSpacer,
   SidebarFooter,
-  SidebarHeading,
 } from "@/design_system/sidebar.tsx";
 
 import { Input, InputGroup } from "@/design_system/input.tsx";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useCallback, useEffect, useState } from "react";
-import clsx from "clsx";
-import { useRouter } from "@tanstack/react-router";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function SideBar() {
   const { loginWithRedirect, logout, isAuthenticated, user, isLoading } =
     useAuth0();
 
-  const [search, setSearch] = useState("");
-
-  const router = useRouter();
-
   return (
     <Sidebar className="w-64">
       <SidebarHeader className="gap-3">
         <SidebarItem href="/">
           <Avatar src="https://catalyst.tailwindui.com/tailwind-logo.svg" />
-          <SidebarLabel>Homer</SidebarLabel>
+          <SidebarLabel>ToNuSU</SidebarLabel>
         </SidebarItem>
 
         <SidebarSection className="max-lg:hidden">
@@ -59,7 +50,7 @@ function SideBar() {
               name="search"
               placeholder="Αναζήτηση&hellip;"
               aria-label="Αναζήτηση"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {}}
             />
           </InputGroup>
         </SidebarSection>

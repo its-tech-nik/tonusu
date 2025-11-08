@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 import { v4 as uuidv4 } from "uuid";
 
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+
 import { GlobalWorkerOptions } from "pdfjs-dist";
 GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -87,9 +89,5 @@ function Index() {
     }
   }, [isAuthenticated, isLoading]);
 
-  return (
-    <div className="size-full flex flex-col justify-center items-center gap-4 relative">
-      <span>Hello world</span>
-    </div>
-  );
+  return <div className="w-full bg-white"></div>;
 }
