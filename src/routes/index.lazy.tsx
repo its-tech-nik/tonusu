@@ -1,4 +1,4 @@
-import { useMemo, useState, type ComponentType } from "react";
+import { useMemo, useState, type ComponentType, useEffect } from "react";
 
 import { useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
@@ -7,6 +7,7 @@ import { Button } from "@/design_system/button.tsx";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { InputGroup } from "@/design_system/input.tsx";
 import { Input } from "@/design_system/input.tsx";
+import axios from "axios";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -67,6 +68,44 @@ function Index() {
   );
   const actionMenuRadius = 160;
   const actionMenuButtonSize = 72;
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const handleLoad = async () => {
+      if (abortController.signal.aborted) {
+        return;
+      }
+
+      console.log("loaded");
+
+      const startFrom = "37.984921656802506, 23.761350135880402";
+      const endTo = "37.95084445458045, 23.72500516775307";
+
+      const response = await axios.get("http://localhost:8000/fetch_data.php", {
+        params: {
+          start: startFrom,
+          end: endTo,
+        },
+        signal: abortController.signal,
+      });
+      const data = response.data;
+
+      console.log(data);
+    };
+
+    if (document.readyState === "complete") {
+      void handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad, {
+        signal: abortController.signal,
+      });
+    }
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
 
   return (
     <div>
