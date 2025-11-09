@@ -21,27 +21,14 @@ declare module "@tanstack/react-router" {
   }
 }
 
-import { Auth0Provider } from "@auth0/auth0-react";
-import { isSecureBrowser } from "./utils/highPrivacyBrowsers.tsx";
-
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const App = () => {
     return (
-      <Auth0Provider
-        domain={import.meta.env.VITE_AUTH0_DOMAIN}
-        clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-        authorizationParams={{
-          redirect_uri: window.location.origin,
-        }}
-        useRefreshTokens={isSecureBrowser()}
-        cacheLocation={isSecureBrowser() ? "localstorage" : "memory"}
-      >
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </Auth0Provider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     );
   };
   const root = ReactDOM.createRoot(rootElement);

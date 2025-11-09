@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useMemo, useState, type ComponentType } from "react";
 
 import { useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
-import { useAuth0 } from "@auth0/auth0-react";
-import { Input, InputGroup } from "@/design_system/input.tsx";
 import { Button } from "@/design_system/button.tsx";
 
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { InputGroup } from "@/design_system/input.tsx";
+import { Input } from "@/design_system/input.tsx";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -15,23 +15,10 @@ export const Route = createLazyFileRoute("/" as never)({
 function Index() {
   const navigate = useNavigate();
 
-  const { isAuthenticated, isLoading } = useAuth0();
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const mapCenter = [51.505, -0.09] as const;
   const LeafletMapContainer = MapContainer as unknown as ComponentType<any>;
   const LeafletTileLayer = TileLayer as unknown as ComponentType<any>;
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const originalUrl = localStorage.getItem("redirect_after_login");
-      if (originalUrl) {
-        localStorage.removeItem("redirect_after_login");
-        navigate({
-          to: originalUrl,
-        });
-      }
-    }
-  }, [isAuthenticated, isLoading]);
 
   const actionMenuItems = useMemo(
     () =>

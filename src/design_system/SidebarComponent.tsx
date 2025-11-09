@@ -51,7 +51,7 @@ function SideBar() {
         <SidebarSection>
           <SidebarItem href="/support">
             <QuestionMarkCircleIcon />
-            <SidebarLabel>Υποστήριξη</SidebarLabel>
+            <SidebarLabel>Support</SidebarLabel>
           </SidebarItem>
         </SidebarSection>
       </SidebarBody>
