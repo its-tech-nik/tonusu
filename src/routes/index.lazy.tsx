@@ -1,4 +1,10 @@
-import { useMemo, useState, type ComponentType, useEffect } from "react";
+import {
+  useMemo,
+  useState,
+  type ComponentType,
+  useEffect,
+  useRef,
+} from "react";
 
 import { useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
@@ -8,6 +14,11 @@ import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { InputGroup } from "@/design_system/input.tsx";
 import { Input } from "@/design_system/input.tsx";
 import axios from "axios";
+import L from "leaflet";
+
+type LeafletMapInstance = ReturnType<typeof L.map>;
+type LeafletPolyline = ReturnType<typeof L.polyline>;
+type LeafletPolygon = ReturnType<typeof L.polygon>;
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -69,43 +80,120 @@ function Index() {
   const actionMenuRadius = 160;
   const actionMenuButtonSize = 72;
 
-  useEffect(() => {
-    const abortController = new AbortController();
+  const mapRef = useRef<LeafletMapInstance | null>(null);
+  const currentRouteRef = useRef<LeafletPolyline | null>(null);
+  const restrictedZoneLayersRef = useRef<LeafletPolygon[]>([]);
 
-    const handleLoad = async () => {
-      if (abortController.signal.aborted) {
+  useEffect(() => {
+    return () => {
+      const map = mapRef.current;
+
+      if (!map) {
         return;
       }
 
-      console.log("loaded");
+      if (currentRouteRef.current) {
+        map.removeLayer(currentRouteRef.current);
+        currentRouteRef.current = null;
+      }
 
-      const startFrom = "37.984921656802506, 23.761350135880402";
-      const endTo = "37.95084445458045, 23.72500516775307";
+      if (restrictedZoneLayersRef.current.length) {
+        restrictedZoneLayersRef.current.forEach((layer) => {
+          map.removeLayer(layer);
+        });
+        restrictedZoneLayersRef.current = [];
+      }
+    };
+  }, []);
 
+  const handleMapReady = async (event: any) => {
+    const map = event.target as LeafletMapInstance;
+
+    mapRef.current = map;
+
+    const startFrom = "37.984921656802506, 23.761350135880402";
+    const endTo = "37.95084445458045, 23.72500516775307";
+
+    try {
       const response = await axios.get("http://localhost:8000/fetch_data.php", {
         params: {
           start: startFrom,
           end: endTo,
         },
-        signal: abortController.signal,
       });
-      const data = response.data;
+      const data = response.data as {
+        error?: string;
+        route?: unknown;
+        restricted_zones?: unknown;
+      };
 
-      console.log(data);
-    };
+      if (data.error) {
+        alert("Error: " + data.error);
+        return;
+      }
 
-    if (document.readyState === "complete") {
-      void handleLoad();
-    } else {
-      window.addEventListener("load", handleLoad, {
-        signal: abortController.signal,
+      if (currentRouteRef.current) {
+        map.removeLayer(currentRouteRef.current);
+        currentRouteRef.current = null;
+      }
+
+      if (restrictedZoneLayersRef.current.length) {
+        restrictedZoneLayersRef.current.forEach((layer) => {
+          map.removeLayer(layer);
+        });
+        restrictedZoneLayersRef.current = [];
+      }
+
+      const routeCoordinates = Array.isArray(data.route)
+        ? (data.route as Array<[number, number]>)
+        : [];
+
+      if (routeCoordinates.length) {
+        const newRoute = L.polyline(routeCoordinates, { color: "blue" }).addTo(
+          map,
+        );
+        currentRouteRef.current = newRoute;
+        map.fitBounds(newRoute.getBounds());
+      }
+
+      const restrictedZonesRaw = Array.isArray(data.restricted_zones)
+        ? data.restricted_zones
+        : [];
+      const newZoneLayers: LeafletPolygon[] = [];
+
+      restrictedZonesRaw.forEach((zone) => {
+        const zoneData =
+          typeof zone === "object" && zone !== null && !Array.isArray(zone)
+            ? (zone as { coordinates?: unknown; reason?: unknown })
+            : null;
+
+        const coordinates = zoneData?.coordinates ?? zone;
+
+        if (!coordinates || !Array.isArray(coordinates)) {
+          return;
+        }
+
+        const polygon = L.polygon(coordinates as any, {
+          color: "red",
+          fillColor: "red",
+          fillOpacity: 0.3,
+        }).addTo(map);
+
+        const reason =
+          typeof zoneData?.reason === "string" && zoneData.reason.trim()
+            ? zoneData.reason
+            : "Restricted area";
+
+        polygon.bindPopup(reason);
+        newZoneLayers.push(polygon);
       });
+
+      restrictedZoneLayersRef.current = newZoneLayers;
+    } catch (error) {
+      console.error("Failed to fetch route data", error);
+      alert("Failed to load route data. Please try again later.");
     }
-
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+  };
 
   return (
     <div>
@@ -114,6 +202,10 @@ function Index() {
         center={mapCenter}
         zoom={13}
         scrollWheelZoom={false}
+        whenCreated={(map: LeafletMapInstance) => {
+          mapRef.current = map;
+        }}
+        whenReady={handleMapReady}
       >
         <LeafletTileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
