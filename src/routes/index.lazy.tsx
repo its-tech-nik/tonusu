@@ -152,7 +152,9 @@ function Index() {
         const newRoute = L.polyline(routeCoordinates, { color: "blue" }).addTo(
           map,
         );
+
         currentRouteRef.current = newRoute;
+
         map.fitBounds(newRoute.getBounds());
       }
 
@@ -201,7 +203,7 @@ function Index() {
         className="absolute top-0 left-0 bottom-0 right-0 z-0"
         center={mapCenter}
         zoom={13}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         whenCreated={(map: LeafletMapInstance) => {
           mapRef.current = map;
         }}
