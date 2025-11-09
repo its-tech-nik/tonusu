@@ -1,6 +1,5 @@
 import {
   Cog8ToothIcon,
-  MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
   ChevronUpIcon,
   UserIcon,
@@ -27,12 +26,10 @@ import {
   SidebarSpacer,
   SidebarFooter,
 } from "@/design_system/sidebar.tsx";
-
 import { useAuth0 } from "@auth0/auth0-react";
 
 function SideBar() {
-  const { loginWithRedirect, logout, isAuthenticated, user, isLoading } =
-    useAuth0();
+  const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
 
   return (
     <Sidebar className="w-64">
@@ -58,33 +55,28 @@ function SideBar() {
 
       <SidebarFooter className="max-lg:hidden">
         <Dropdown>
-          {isLoading ? (
-            "Loading user..."
-          ) : (
-            <DropdownButton as={SidebarItem}>
-              <span className="flex min-w-0 items-center gap-3">
-                <Avatar
-                  src={
-                    (isAuthenticated && user && user.picture) ||
-                    "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
-                  }
-                  className="size-10"
-                  square
-                  alt=""
-                />
-                <span className="min-w-0">
-                  <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                    {(isAuthenticated && user && user.name) || "Guest"}
-                  </span>
-                  <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                    {(isAuthenticated && user && user.email) ||
-                      "guest@example.com"}
-                  </span>
+          <DropdownButton as={SidebarItem}>
+            <span className="flex min-w-0 items-center gap-3">
+              <Avatar
+                src={
+                  (isAuthenticated && user?.picture) ||
+                  "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                }
+                className="size-10"
+                square
+                alt=""
+              />
+              <span className="min-w-0">
+                <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
+                  {(isAuthenticated && user?.name) || "Guest"}
+                </span>
+                <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
+                  {(isAuthenticated && user?.email) || "guest@example.com"}
                 </span>
               </span>
-              <ChevronUpIcon />
-            </DropdownButton>
-          )}
+            </span>
+            <ChevronUpIcon />
+          </DropdownButton>
           <DropdownMenu className="min-w-64" anchor="top start">
             <DropdownItem href="/my-profile">
               <UserIcon />
