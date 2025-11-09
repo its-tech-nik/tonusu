@@ -2,7 +2,6 @@ import {
   ArrowRightStartOnRectangleIcon,
   Cog8ToothIcon,
   LightBulbIcon,
-  MagnifyingGlassIcon,
   ShieldCheckIcon,
   UserIcon,
 } from "@heroicons/react/16/solid";
@@ -28,13 +27,6 @@ import { Input, InputGroup } from "@/design_system/input.tsx";
 function NavigationBar() {
   return (
     <Navbar>
-      <NavbarSpacer className="ml-0.5" />
-      <NavbarSection>
-        <InputGroup className="w-full">
-          <Input name="search" placeholder="Where to?" aria-label="Where to?" />
-        </InputGroup>
-      </NavbarSection>
-      <NavbarSpacer />
       <NavbarSection>
         <Dropdown>
           <DropdownButton as={NavbarItem}>
@@ -70,6 +62,18 @@ function NavigationBar() {
           </DropdownMenu>
         </Dropdown>
       </NavbarSection>
+      <NavbarSpacer />
+      <NavbarSection>
+        <InputGroup className="w-full">
+          <Input
+            className=""
+            name="search"
+            placeholder="Where to?"
+            aria-label="Where to?"
+          />
+        </InputGroup>
+      </NavbarSection>
+      <NavbarSpacer className="ml-0.5" />
     </Navbar>
   );
 }

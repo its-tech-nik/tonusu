@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { NavbarItem } from "./navbar.tsx";
 import { Button } from "./button.tsx";
 import { useLocation } from "@tanstack/react-router";
-import clsx from "clsx";
 
 function OpenMenuIcon() {
   return (
@@ -60,8 +59,6 @@ export function SidebarLayout({
   const [showSidebarMobile, setShowSidebarMobile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
 
-  const { pathname } = useLocation();
-
   return (
     <div className="relative isolate flex min-h-svh w-full bg-white max-lg:flex-col lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950">
       {/* Sidebar on desktop */}
@@ -79,6 +76,7 @@ export function SidebarLayout({
 
       {/* Navbar on mobile */}
       <header className="flex items-center px-4 lg:hidden">
+        <div className="min-w-0 flex-1">{navbar}</div>
         <div className="py-2.5">
           <NavbarItem
             onClick={() => setShowSidebarMobile(true)}
@@ -87,7 +85,6 @@ export function SidebarLayout({
             <OpenMenuIcon />
           </NavbarItem>
         </div>
-        <div className="min-w-0 flex-1">{navbar}</div>
       </header>
 
       {/* Content */}

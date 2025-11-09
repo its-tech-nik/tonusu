@@ -71,7 +71,7 @@ function Index() {
   return (
     <div>
       <LeafletMapContainer
-        className="absolute top-16 left-0 bottom-0 right-0 z-0"
+        className="absolute top-0 left-0 bottom-0 right-0 z-0"
         center={mapCenter}
         zoom={13}
         scrollWheelZoom={false}
@@ -88,7 +88,7 @@ function Index() {
       </LeafletMapContainer>
 
       <div className="absolute top-4 left-1/2 -translate-x-1/2 max-lg:hidden z-1">
-        <InputGroup>
+        <InputGroup className="bg-white/50 backdrop-blur-md rounded-full">
           <Input type="text" placeholder="Where to?" />
         </InputGroup>
       </div>
