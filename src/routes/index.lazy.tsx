@@ -4,7 +4,7 @@ import { useNavigate, createLazyFileRoute } from "@tanstack/react-router";
 
 import { Button } from "@/design_system/button.tsx";
 
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { InputGroup } from "@/design_system/input.tsx";
 import { Input } from "@/design_system/input.tsx";
 
@@ -16,7 +16,7 @@ function Index() {
   const navigate = useNavigate();
 
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
-  const mapCenter = [51.505, -0.09] as const;
+  const mapCenter = [37.9747, 23.7273] as const;
   const LeafletMapContainer = MapContainer as unknown as ComponentType<any>;
   const LeafletTileLayer = TileLayer as unknown as ComponentType<any>;
 
@@ -25,31 +25,44 @@ function Index() {
       [
         {
           id: "route-overview",
+          icon: "🌪️",
           onSelect: () => {
             navigate({ to: "/route_overview" });
             setIsActionMenuOpen(false);
           },
+          lowContrast: false,
         },
         {
-          id: "reporting",
+          id: "death-reporting",
+          icon: "🛡️",
           onSelect: () => {
-            navigate({ to: "/reporting" });
+            navigate({ to: "/death_reporting" });
             setIsActionMenuOpen(false);
           },
+          lowContrast: false,
         },
         {
-          id: "bookmark",
-          onSelect: () => {
-            setIsActionMenuOpen(false);
-          },
-        },
-        {
-          id: "share",
+          id: "loss-theft",
+          icon: "♿",
           onSelect: () => {
             setIsActionMenuOpen(false);
           },
+          lowContrast: true,
         },
-      ] satisfies Array<{ id: string; onSelect: () => void }>,
+        {
+          id: "psychological-discomfort",
+          icon: "😨",
+          onSelect: () => {
+            setIsActionMenuOpen(false);
+          },
+          lowContrast: true,
+        },
+      ] satisfies Array<{
+        id: string;
+        onSelect: () => void;
+        icon: string;
+        lowContrast: boolean;
+      }>,
     [navigate],
   );
   const actionMenuRadius = 160;
@@ -67,11 +80,12 @@ function Index() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[51.505, -0.09]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
+        <Marker
+          position={mapCenter}
+          eventHandlers={{
+            click: () => navigate({ to: "/route_overview" }),
+          }}
+        ></Marker>
       </LeafletMapContainer>
 
       <div className="absolute top-4 left-1/2 -translate-x-1/2 max-lg:hidden z-1">
@@ -81,32 +95,6 @@ function Index() {
       </div>
 
       <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-10">
-        {!isActionMenuOpen && (
-          <Button
-            className=""
-            onClick={() => navigate({ to: "/route_overview" })}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-10"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-              />
-            </svg>
-          </Button>
-        )}
         <div
           className="relative"
           style={{
@@ -119,11 +107,21 @@ function Index() {
               (Math.PI / 2 / (actionMenuItems.length - 1 || 1)) * index;
             const offsetX = Math.cos(angle) * actionMenuRadius;
             const offsetY = Math.sin(angle) * actionMenuRadius;
+            const iconContent = item.lowContrast ? (
+              <span className="text-3xl leading-none text-slate-800 dark:text-slate-100">
+                {item.icon}
+              </span>
+            ) : (
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/70 text-3xl leading-none text-slate-800 shadow-[0_12px_24px_rgba(15,23,42,0.18)] ring-1 ring-white/60 backdrop-blur-sm transition-[background,box-shadow] duration-200 dark:bg-slate-900/65 dark:text-slate-100 dark:shadow-[0_12px_24px_rgba(2,6,23,0.55)] dark:ring-slate-100/15">
+                {item.icon}
+              </span>
+            );
 
             return (
               <Button
+                outline
                 key={item.id}
-                className="rounded-full p-5 aspect-square overflow-hidden transition-transform duration-200 ease-out"
+                className="transition-transform duration-200 ease-out"
                 onClick={item.onSelect}
                 style={{
                   position: "absolute",
@@ -140,33 +138,18 @@ function Index() {
                     "transform 180ms ease, opacity 150ms ease, box-shadow 150ms ease",
                 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#bc4e00"
-                  className="size-10"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
-                  />
-                </svg>
+                {iconContent}
               </Button>
             );
           })}
 
           <Button
-            className="aspect-square"
+            className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-white/80 text-slate-900 shadow-[0_18px_30px_rgba(15,23,42,0.18)] ring-1 ring-white/50 backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-white dark:bg-slate-900/70 dark:text-slate-100 dark:shadow-[0_18px_30px_rgba(2,6,23,0.55)] dark:ring-slate-100/15 dark:hover:bg-slate-900/80"
             onClick={() => setIsActionMenuOpen((prev) => !prev)}
             style={{
               position: "absolute",
               bottom: 0,
               right: 0,
-              width: actionMenuButtonSize,
-              height: actionMenuButtonSize,
             }}
           >
             <svg
@@ -176,9 +159,6 @@ function Index() {
               strokeWidth={1.5}
               stroke="#bc4e00"
               className="size-10 transition-transform duration-200 ease-out"
-              style={{
-                transform: isActionMenuOpen ? "rotate(45deg)" : "rotate(0deg)",
-              }}
             >
               <path
                 strokeLinecap="round"
